@@ -19,6 +19,7 @@ permissions:
 
 env:
   REGISTRY: ghcr.io
+  IMAGE: ghcr.io/juan794/tec-actions-test
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -41,6 +42,15 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push (tag=latest)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ env.IMAGE }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       # Runs a single command using the runners shell
       - name: Run a one-line script
